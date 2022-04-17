@@ -16,7 +16,7 @@ int main() {
 
     printf("Digite a semente para sortear a senha (0 a 10000): ");
     scanf("%d", &seed);
-    pass = ((8121 * seed + 28411) % 134456) % 10;
+    pass = ((8121 * seed + 28411) % 134456) % 100000;
     printf("Quantidade de tentativas (1 a 10): ");
     scanf("%d", &attempts);
 
