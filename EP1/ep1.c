@@ -23,6 +23,17 @@ int main() {
     while (attempts > 0) {
         printf("Digite a tentativa (0 a 99999): ");
         scanf("%d", &guess);
+  
+        /* Threat digits from left to rigth */
+        /* Always 5 digits */
+        /* Check if digit is at the right place */
+        /* Output in PT-BR (translate digit to language) */
+        /* Check if digit is at the wrong place */
+        /* Output in PT-BR (translate digit to language) */
+
+        /* If pass and guess are equal, end and congratulate*/
+        /* Else, attempts--*/
+
         if(pass == guess) {
             printf("Voce acertou! A senha eh de fato %d.", pass);
             break;
