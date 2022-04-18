@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 int main() { 
-    int seed, attempts, pass, guess, temp, i, temp2, j;
+    int seed, attempts, pass, guess, i, j, temp, temp2;
     int correct[5] = {0};
     int used[5] = {0};
 
@@ -91,8 +91,6 @@ int main() {
         
         attempts--;
     }
-
-    /* TODO: Clear code */
 
     if (attempts == 0) {
         printf("Voce perdeu! A senha era %d.", pass);
