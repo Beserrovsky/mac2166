@@ -10,7 +10,8 @@
 #include <stdio.h>
 
 int main() { 
-    int seed, attempts, pass, guess, temp, i;
+    int seed, attempts, pass, guess, temp, i, temp2, j, count;
+    int used[5] = {0};
 
     char *positions[] = {
                             "Primeiro",
@@ -37,33 +38,48 @@ int main() {
             printf("Voce acertou! A senha eh de fato %d.", pass);
             break;
         }
-         
+        
         i = 0;
         temp = 10000;
         while (temp >= 1) {
 
-            /* positions[i] -> PT-BR position */
-
-            /* ((guess / temp) % 10) -> guess value at that position */
-            
-            /* ((pass / temp) % 10) -> pass value at that position */
-            
             if (((guess / temp) % 10) == (((pass / temp) % 10))) {
 
                 printf("%s digito certo!\n", positions[i]);
+                used[i] = 1;
             }
 
-            /* printf("%s digito em posicao incorreta.\n", positions[i]); */
+            temp2 = 10000;
+            j = 0;
+            while (temp2 >= 1) {
+
+                if (used[i] == 0) {
+                        
+                    if (((guess / temp) % 10) == (((pass / temp2) % 10))) {
+
+                        printf("%s digito em posicao incorreta.\n", positions[i]);
+                        used[i] = 1;
+                    }
+                }
+
+                j++;
+                if (temp2 == 1) temp2--;
+                else temp2 /= 10;
+            }
 
             i++;
             if (temp == 1) temp--;
             else temp /= 10;
         }
-
-        /* TODO: Check if digit is at the wrong place */
+        
+        for (count = 0; count < 5; count++) {
+            used[count] = 0;
+        }
 
         attempts--;
     }
+
+    /* FIXME: Its gotta be two separate loops, pipe in/test1.txt and analyze results*/
 
     if (attempts == 0) {
         printf("Voce perdeu! A senha era %d.", pass);
