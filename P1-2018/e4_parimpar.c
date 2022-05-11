@@ -15,8 +15,8 @@ int main() {
         if (num % 2 == 0) pa++;
     }
 
-    if (pa == n || pa == 0) printf("SIM");
-    else printf("NAO");
+    if (pa == n || pa == 0) printf("SIM\n");
+    else printf("NAO\n");
 
     return 0;
 }

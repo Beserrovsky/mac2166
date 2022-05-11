@@ -11,8 +11,8 @@ int main() {
         if (n % i == 0) sum += i;
     }
 
-    if (sum == n) printf("SIM");
-    else printf("NAO");
+    if (sum == n) printf("SIM\n");
+    else printf("NAO\n");
 
     return 0;
 }

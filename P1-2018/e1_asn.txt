@@ -1,0 +1,23 @@
+Output:
+
+Digite o digito final do seu Numero USP: 2
+Primeiro x= 2
+Primeiro y= 5
+conta= 1
+* x= 1
+y= 1
+conta= 2
+x= 4
+y= 6
+conta= 3
+* x= 2
+y= 2
+conta= 4
+* x= 1
+y= -2
+conta= 5
+x= 4
+y= 3
+Ultimo x= 4
+Ultimo y= 3
+
