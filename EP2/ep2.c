@@ -48,6 +48,8 @@ int main() {
     scanf("%lf", &dt);
 
     while (t <= T) {
+
+        printf("%E %E %E %E %E %E\n", x0, y0, x1, y1, x2, y2);
         t+= dt;
 
         atualize(&x0, &y0, &vx0, &vy0,
@@ -64,8 +66,6 @@ int main() {
                 forca('x', 2, x0, y0, m0, x1, y1, m1, x2, y2, m2) / m2,
                 forca('y', 2, x0, y0, m0, x1, y1, m1, x2, y2, m2) / m2,
                 dt);
-
-        printf("%E %E %E %E %E %E\n", x0, y0, x1, y1, x2, y2);
     }
 
     printf("\n");
@@ -82,27 +82,23 @@ double forca(char c, int i,
              double x2, double y2, double m2) {
 
     if (c == 'x') {
-        if (i == 0) {
-            return fx(x0, y0, m0, x1, y1, m1) + fx(x0, y0, m0, x2, y2, m2);
-        }
-        if (i == 1) {
-            return fx(x1, y1, m1, x0, y0, m0) + fx(x1, y1, m1, x2, y2, m2);
-        }
-        if (i == 2) {
-            return fx(x2, y2, m2, x0, y0, m0) + fx(x2, y2, m2, x1, y1, m1);
-        }
+        if (i == 0)
+            return fx(x1, y1, m1, x0, y0, m0) + fx(x2, y2, m2, x0, y0, m0);
+        if (i == 1)
+            return fx(x0, y0, m0, x1, y1, m1) + fx(x2, y2, m2, x1, y1, m1);
+        if (i == 2)
+            return fx(x0, y0, m0, x2, y2, m2) + fx(x1, y1, m1, x2, y2, m2);
     }
+
     if (c == 'y') {
-        if (i == 0) {
-            return fy(x0, y0, m0, x1, y1, m1) + fy(x0, y0, m0, x2, y2, m2);
-        }
-        if (i == 1) {
-            return fy(x1, y1, m1, x0, y0, m0) + fy(x1, y1, m1, x2, y2, m2);
-        }
-        if (i == 2) {
-            return fy(x2, y2, m2, x0, y0, m0) + fy(x2, y2, m2, x1, y1, m1);
-        }
+        if (i == 0)
+            return fy(x1, y1, m1, x0, y0, m0) + fy(x2, y2, m2, x0, y0, m0);
+        if (i == 1)
+            return fy(x0, y0, m0, x1, y1, m1) + fy(x2, y2, m2, x1, y1, m1);
+        if (i == 2)
+            return fy(x0, y0, m0, x2, y2, m2) + fy(x1, y1, m1, x2, y2, m2);
     }
+
     return 0;
 }
 
