@@ -11,6 +11,8 @@
 #include <math.h>
 
 #define G 6.67e-11
+#define DEBUG 0
+#define ITERATION_TIME 1.8e-5 /*DATA FOR MY COMPUTER, CHANGE IT FOR YOURS */
 
 /* Distance between two points in space */
 double dist(double p1x, double p1y, double p2x, double p2y);
@@ -46,6 +48,13 @@ int main() {
 
     scanf("%lf", &T);
     scanf("%lf", &dt);
+
+    if (DEBUG == 1) {
+        printf("DEBUG INFO:\n");
+        printf("Iterations: %f\n", (T / dt));
+        printf("Estimated time: %.3fs\n", ITERATION_TIME * (T / dt));
+        printf("\\--\\--\\ \n");
+    }
 
     while (t <= T) {
 
