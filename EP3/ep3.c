@@ -5,18 +5,22 @@
 #define FALSE 0
 #define N_MAX 15
 
+/* Testing */
+void testing(int N, int b, int c, int r, int f, int v);
+
 /* Core */
 void generate(int N, int b, int c, int r, int f, int v);
-int check(int *lines, int N, int x, int y, int b, int c, int r);
-int checkTower(int *lines, int N, int x);
-int checkBixopp(int *lines, int N, int x, int y);
-int checkHorse(int *lines, int N, int x, int y);
-int checkKing(int *lines, int N, int x, int y);
-void printM(); /*TODO*/
-void printS(int *lines, int N);
+int check(int lines[], int N, int x, int y, int b, int c, int r);
+int checkTower(int lines[], int N, int x);
+int checkBixopp(int lines[], int N, int x, int y);
+int checkHorse(int lines[], int N, int x, int y);
+int checkKing(int lines[], int N, int x, int y);
+void printM(int fr[N_MAX][N_MAX], int N, int qtdsol);
+void printS(int lines[], int N);
 
 /* Util */
-void clearArr(int *array, int size);
+void fillArr(int array[], int size, int value);
+void fillMatrix(int array[N_MAX][N_MAX], int size, int value);
 
 int main(int argc, char *argv[]) {
     int N = atoi(argv[1]);
@@ -25,17 +29,46 @@ int main(int argc, char *argv[]) {
     int r = atoi(argv[4]);
     int f = atoi(argv[5]);
     int v = atoi(argv[6]);
+    testing(N, b, c, r, f, v); /*FIXME REMOVE*/
     generate(N, b, c, r, f, v);
     return 0;
+}
+
+/* Testing */
+
+void testing(int N, int b, int c, int r, int f, int v) {
+    int lines[N_MAX];
+    int fr[N_MAX][N_MAX];
+    int x = 4, y = 4, qtdsol = 10;
+
+    N = 10;
+
+    fillArr(lines, N, -1);
+    fillMatrix(fr, N, 0);
+
+    lines[y] = x;
+    printS(lines, N);
+
+    x = 6;
+    y = 3;
+
+    if(check(lines, N, x, y, b, c, r)) { 
+        lines[y] = x;
+        printS(lines, N);
+    }
+    else printf("NAO PODE");
+
 }
 
 /* Core */
 
 void generate(int N, int b, int c, int r, int f, int v) {
     int lines[N_MAX];
+    int fr[N_MAX][N_MAX];
     int i, back, x = 0, y = 0, qtdsol = 0;
 
-    clearArr(lines, N);
+    fillArr(lines, N, -1);
+    fillMatrix(fr, N, 0);
 
     /* Loop Logic */
 
@@ -47,39 +80,18 @@ void generate(int N, int b, int c, int r, int f, int v) {
      *  - ... 
      */
 
-    for (i = 0; i < N; i++) { /* Go through each first line position */
-        lines[0] = i;
-        x = 0;
-        y = 1;
-        back = 1;
-        while(y != 1 || x < N) {
-            if(check(lines, N, x, y, b, c, r)) {
-                lines[y] = x;
-                x = 0;
-                if(y < N - 1) y++;
-                else { 
-                    if(v == 1) printS(lines, N);
-                    /* Backtrace */
-                    lines[y] = -back;
-                    y-= back;
-                    x = lines[y];
-                    if(back < N) back++;
-                }
-            }
-            else if(x < N - 1 || y == 1) x++;
-        }
-    }
+    /* TODO BACKTRAKING */
 
-    if(qtdsol == 0)
+    if(!qtdsol)
         printf("Nao ha solucao");
     else
         printf("Total de solucoes: %d\n", qtdsol);
     
-    if (f == 1) 
-        printM(lines, qtdsol);
+    if(f) 
+        printM(fr, N, qtdsol);
 }
 
-int check(int *lines, int N, int x, int y, int b, int c, int r) {
+int check(int lines[], int N, int x, int y, int b, int c, int r) {
     int res = 0;
     res += checkTower(lines, N, x);
     if(b) res+= checkBixopp(lines, N, x, y);
@@ -90,7 +102,7 @@ int check(int *lines, int N, int x, int y, int b, int c, int r) {
     return TRUE;
 }
 
-int checkTower(int *lines, int N, int x) {
+int checkTower(int lines[], int N, int x) {
     int i;
     for (i = 0; i < N; i++) {
         if(lines[i] == x) return FALSE;
@@ -98,39 +110,83 @@ int checkTower(int *lines, int N, int x) {
     return TRUE;
 }
 
-int checkBixopp(int *lines, int N, int x, int y) {
-    /*TODO*/
+int checkBixopp(int lines[], int N, int x, int y) {
+    /*FIXME*/
+    int i;
+    for(i = y; i >= 0; i--) {
+        if(y - i >= 0 && lines[y - i] >= 0)
+            if(lines[y - i] == x - i || lines[y - i] == x + i)
+                return FALSE;
+    }
+    for(i = N - y; i >= y; i--) {
+        if(y + i < N && lines[y + i] >= 0)
+            if(lines[y + i] == x - i || lines[y + i] == x + i)
+                return FALSE;
+    }
     return TRUE;
 }
 
-int checkHorse(int *lines, int N, int x, int y) {
-    /*TODO*/
+int checkHorse(int lines[], int N, int x, int y) {
+    if(y - 2 >= 0) {
+        if(lines[y - 2] >= 0 && 
+                ( lines[y - 2] == x - 1 || lines[y - 2] == x + 1))
+            return FALSE;
+    }
+    if(y - 1 >= 0) {
+        if(lines[y - 1] >= 0 && 
+                ( lines[y - 1] == x - 2 || lines[y - 1] == x + 2))
+            return FALSE;
+    }
+    if(y + 2 < N) {
+        if(lines[y + 2] >= 0 && 
+                ( lines[y + 2] == x - 1 || lines[y + 2] == x + 1))
+            return FALSE;
+    }
+    if(y + 1 < N) {
+        if(lines[y + 1] >= 0 && 
+                ( lines[y + 1] == x - 2 || lines[y + 1] == x + 2))
+            return FALSE;
+    }
+
     return TRUE;
 }
 
-int checkKing(int *lines, int N, int x, int y) {
-   /*TODO*/ 
+int checkKing(int lines[], int N, int x, int y) {
+    if(y - 1 >= 0) {
+        if(lines[y - 1] >= 0 && lines[y - 1] >= x - 1 && lines[y - 1] <= x + 1)
+            return FALSE;
+    }
+    if(lines[y] == x) return FALSE;
+    if(y + 1 < N) {
+        if(lines[y + 1] >= 0 && lines[y + 1] >= x - 1 && lines[y + 1] <= x + 1)
+            return FALSE;
+    }
+
     return TRUE;
 }
 
-void printM(int *lines, int qtdsol) {
-/* 
- * deve imprimir uma matriz onde cada uma das N2 posições é a razão q/T, 
- * onde q é o número de vezes, considerando todas as soluções possíveis, 
- * em que uma rainha foi colocada naquela posição e 
- * T é o número total de soluções
- */
+void printM(int fr[N_MAX][N_MAX], int N, int qtdsol) {
+    /* 
+     * deve imprimir uma matriz onde cada uma das N^2 posições é a razão q/T, 
+     * onde q é o número de vezes, considerando todas as soluções possíveis, 
+     * em que uma rainha foi colocada naquela posição e 
+     * T é o número total de soluções
+     */
 
-    /*
     int i, j;
-    double fr[N];
 
     printf("Mapa de frequencias\n");
-    */
-    /* TODO */
+
+    for(i = 0; i < N; i++) {
+        for(j = 0; j < N; j++) {
+            printf("%f", ((double)fr[i][j] / (double)qtdsol));
+            if(j + 1 < N) printf(" ");
+            else printf("\n");
+        }
+    }
 }
 
-void printS(int *lines, int N) {
+void printS(int lines[], int N) {
     /* deve imprimir uma solução, para em conjunto, imprimir todas*/
     int i, j;
     char line[N_MAX];
@@ -152,9 +208,18 @@ void printS(int *lines, int N) {
 
 /* Util */
 
-void clearArr(int *array, int size) {
+void fillArr(int array[], int size, int value) {
     int i;
     for(i = 0; i < size; i++) {
-        array[i] = -1;
+        array[i] = value;
+    }
+}
+
+void fillMatrix(int matrix[N_MAX][N_MAX], int size, int value) {
+    int i, j;
+    for(i = 0; i < size; i++) {
+        for(j = 0; j < size; j++) {
+            matrix[i][j] = value;
+        }
     }
 }
