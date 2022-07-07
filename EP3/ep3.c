@@ -5,9 +5,6 @@
 #define FALSE 0
 #define N_MAX 15
 
-/* Testing */
-void testing(int N, int b, int c, int r, int f, int v);
-
 /* Core */
 void generate(int N, int b, int c, int r, int f, int v);
 int check(int lines[], int N, int x, int y, int b, int c, int r);
@@ -29,35 +26,8 @@ int main(int argc, char *argv[]) {
     int r = atoi(argv[4]);
     int f = atoi(argv[5]);
     int v = atoi(argv[6]);
-    testing(N, b, c, r, f, v); /*FIXME REMOVE*/
     generate(N, b, c, r, f, v);
     return 0;
-}
-
-/* Testing */
-
-void testing(int N, int b, int c, int r, int f, int v) {
-    int lines[N_MAX];
-    int fr[N_MAX][N_MAX];
-    int x = 4, y = 4, qtdsol = 10;
-
-    N = 10;
-
-    fillArr(lines, N, -1);
-    fillMatrix(fr, N, 0);
-
-    lines[y] = x;
-    printS(lines, N);
-
-    x = 6;
-    y = 3;
-
-    if(check(lines, N, x, y, b, c, r)) { 
-        lines[y] = x;
-        printS(lines, N);
-    }
-    else printf("NAO PODE");
-
 }
 
 /* Core */
@@ -65,7 +35,7 @@ void testing(int N, int b, int c, int r, int f, int v) {
 void generate(int N, int b, int c, int r, int f, int v) {
     int lines[N_MAX];
     int fr[N_MAX][N_MAX];
-    int i, back, x = 0, y = 0, qtdsol = 0;
+    int x = 0, y = 0, qtdsol = 0;
 
     fillArr(lines, N, -1);
     fillMatrix(fr, N, 0);
@@ -76,14 +46,34 @@ void generate(int N, int b, int c, int r, int f, int v) {
      *  - N Queens
      *  - Only one Queen in each line
      *  - When adding a Queen, if it can kill, it can die
-     *  - When found a solution, go back and try other until first line change
      *  - ... 
      */
 
-    /* TODO BACKTRAKING */
+    /* FIXME SEG FAULT */
+    while(x < N || y != 0) {
+        if(check(lines, N, x, y, b, c , r)) {
+            lines[y] = x;
+            fr[y][x] = fr[y][x] + 1;
+            if(y == (N - 1)) {
+                qtdsol++;
+                if(v) printS(lines, N);    
+            }
+            else {
+                y++;
+                x = -1;
+            }
+        }
+        if(x > (N - 1)) {
+            lines[y] = -1;
+
+            x = lines[y - 1];
+            y = y - 1;
+        }
+        x++;
+    }
 
     if(!qtdsol)
-        printf("Nao ha solucao");
+        printf("Nao ha solucao\n");
     else
         printf("Total de solucoes: %d\n", qtdsol);
     
@@ -93,12 +83,16 @@ void generate(int N, int b, int c, int r, int f, int v) {
 
 int check(int lines[], int N, int x, int y, int b, int c, int r) {
     int res = 0;
+  
+    res += ((x < N) && (x >= 0) && (y < N) && (y >= 0));
     res += checkTower(lines, N, x);
-    if(b) res+= checkBixopp(lines, N, x, y);
+
+    /*if(b) res+= checkBixopp(lines, N, x, y);*/
     if(c) res+= checkHorse(lines, N, x, y);
     if(r) res+= checkKing(lines, N, x, y);
 
-    if(res < 1 + b + c + r) return FALSE;
+    /*if(res < 2 + b + c + r) return FALSE;*/
+    if(res < (2 + c + r)) return FALSE;
     return TRUE;
 }
 
@@ -111,18 +105,8 @@ int checkTower(int lines[], int N, int x) {
 }
 
 int checkBixopp(int lines[], int N, int x, int y) {
-    /*FIXME*/
-    int i;
-    for(i = y; i >= 0; i--) {
-        if(y - i >= 0 && lines[y - i] >= 0)
-            if(lines[y - i] == x - i || lines[y - i] == x + i)
-                return FALSE;
-    }
-    for(i = N - y; i >= y; i--) {
-        if(y + i < N && lines[y + i] >= 0)
-            if(lines[y + i] == x - i || lines[y + i] == x + i)
-                return FALSE;
-    }
+    /*TODO*/
+
     return TRUE;
 }
 
@@ -174,7 +158,11 @@ void printM(int fr[N_MAX][N_MAX], int N, int qtdsol) {
      */
 
     int i, j;
-
+    
+    if(qtdsol == 0) {
+        printf("Mapa de frequencias indefinido (nao ha solucao)");
+        return;
+    }
     printf("Mapa de frequencias\n");
 
     for(i = 0; i < N; i++) {
@@ -198,7 +186,7 @@ void printS(int lines[], int N) {
     for (i = 0; i < N; i++) {
         line[lines[i]] = 'X';
         for (j = 0; j < N; j++) {
-            printf("%c", line[j]);
+            printf("%c ", line[j]);
         }
         printf("\n");
         line[lines[i]] = '-';
