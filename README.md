@@ -1,6 +1,7 @@
 # MAC2166
 
-This is a eletrical engineering class that I attend to, the programs here are indexed only for portfolio and nostalgia reasons, I condeem any use of my code for plagiarism!
+This is an eletrical engineering class that I attend to, the programs here are indexed only for portfolio and nostalgia reasons, I condeem any use of my code for plagiarism!
+This Repos was kept PRIVATE until the end of the semester.
 
 ## Compiler
 
