@@ -169,7 +169,7 @@ void printM(int fr[N_MAX][N_MAX], int N, int qtdsol) {
         printf("Mapa de frequencias indefinido (nao ha solucao)");
         return;
     }
-    printf("Mapa de frequencias\n");
+    printf("\nMapa de frequencias\n");
 
     for(i = 0; i < N; i++) {
         for(j = 0; j < N; j++) {
