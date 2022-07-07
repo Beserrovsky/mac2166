@@ -1,3 +1,12 @@
+/***************************************************************/
+/**                                                           **/
+/**   Felipe Beserra de Oliveira                 13683702     **/
+/**   Exercício-Programa 3                                    **/
+/**   Professor: Yoshiharu Kohayakawa                         **/
+/**   Turma: 03                                               **/
+/**                                                           **/
+/***************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 
