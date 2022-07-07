@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 void generate(int N, int b, int c, int r, int f, int v) {
     int lines[N_MAX];
     int fr[N_MAX][N_MAX];
-    int x = 0, y = 0, qtdsol = 0;
+    int x = 0, y = 0, qtdsol = 0, i;
 
     fillArr(lines, N, -1);
     fillMatrix(fr, N, 0);
@@ -52,10 +52,12 @@ void generate(int N, int b, int c, int r, int f, int v) {
     while(x < N || y != 0) {
         if(check(lines, N, x, y, b, c , r)) {
             lines[y] = x;
-            fr[y][x] = fr[y][x] + 1;
             if(y == (N - 1)) {
                 qtdsol++;
-                if(v) printS(lines, N);    
+                if(v) printS(lines, N);
+                for(i = 0; i < N; i++) {
+                    fr[i][lines[i]] = fr[i][lines[i]] + 1;
+                }
             }
             else {
                 y++;
@@ -171,7 +173,7 @@ void printM(int fr[N_MAX][N_MAX], int N, int qtdsol) {
 
     for(i = 0; i < N; i++) {
         for(j = 0; j < N; j++) {
-            printf("%f", ((double)fr[i][j] / (double)qtdsol));
+            printf("%.4f", ((double)fr[i][j] / (double)qtdsol));
             if(j + 1 < N) printf(" ");
             else printf("\n");
         }
@@ -215,3 +217,4 @@ void fillMatrix(int matrix[N_MAX][N_MAX], int size, int value) {
         }
     }
 }
+
