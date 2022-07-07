@@ -49,7 +49,6 @@ void generate(int N, int b, int c, int r, int f, int v) {
      *  - ... 
      */
 
-    /* FIXME SEG FAULT */
     while(x < N || y != 0) {
         if(check(lines, N, x, y, b, c , r)) {
             lines[y] = x;
@@ -82,17 +81,12 @@ void generate(int N, int b, int c, int r, int f, int v) {
 }
 
 int check(int lines[], int N, int x, int y, int b, int c, int r) {
-    int res = 0;
-  
-    res += ((x < N) && (x >= 0) && (y < N) && (y >= 0));
-    res += checkTower(lines, N, x);
-
-    /*if(b) res+= checkBixopp(lines, N, x, y);*/
-    if(c) res+= checkHorse(lines, N, x, y);
-    if(r) res+= checkKing(lines, N, x, y);
-
-    /*if(res < 2 + b + c + r) return FALSE;*/
-    if(res < (2 + c + r)) return FALSE;
+    if(!((x < N) && (x >= 0) && (y < N) && (y >= 0)) ||
+       !checkTower(lines, N, x)                      ||
+       (b && !checkBixopp(lines, N, x, y))           ||
+       (c && !checkHorse(lines, N, x, y))            ||
+       (r && !checkKing(lines, N, x, y))
+       ) return FALSE; 
     return TRUE;
 }
 
@@ -105,7 +99,17 @@ int checkTower(int lines[], int N, int x) {
 }
 
 int checkBixopp(int lines[], int N, int x, int y) {
-    /*TODO*/
+    int i;
+    for(i = 0; i < N; i++) {
+        if( x - (y - i) >= 0 && 
+            x - (y - i) <  N && 
+            lines[i] == x - (y - i)) 
+            return FALSE;
+        if( x + (y - i) >= 0 && 
+            x + (y - i) <  N && 
+            lines[i] == x + (y - i)) 
+            return FALSE;
+    }
 
     return TRUE;
 }
